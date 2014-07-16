@@ -1,14 +1,12 @@
 
 Polymer('beatsme-player', {
-<<<<<<< HEAD
-=======
   playerData : '',
->>>>>>> abfd3590184ab6df50b3db6824eb2c577dc84ea0
+  playerIndex: 0,
   ready: function() {
     this.data='parent content';
   },
-  ajaxResponse: function(event, response) {
-<<<<<<< HEAD
+  play: function() {
+    debugger;
     var that = this;
     var bam = new BeatsAudioManager("beatsme");
 
@@ -20,8 +18,7 @@ Polymer('beatsme-player', {
             access_token:that.accessToken,
             user_id:that.userId
         };
-        var item = response.response.data[that.playerIndex];
-        bam.identifier = this.trackId;
+        bam.identifier = that.trackId;
         //bam.load();
     };
     function handleError(value) {
@@ -49,8 +46,5 @@ Polymer('beatsme-player', {
             break;
         }
     };
-=======
-            console.log(response);
->>>>>>> abfd3590184ab6df50b3db6824eb2c577dc84ea0
   }
 });
