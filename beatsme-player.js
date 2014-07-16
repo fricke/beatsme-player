@@ -1,9 +1,14 @@
 
 Polymer('beatsme-player', {
+<<<<<<< HEAD
+=======
+  playerData : '',
+>>>>>>> abfd3590184ab6df50b3db6824eb2c577dc84ea0
   ready: function() {
     this.data='parent content';
   },
   ajaxResponse: function(event, response) {
+<<<<<<< HEAD
     var that = this;
     var bam = new BeatsAudioManager("beatsme");
 
@@ -44,5 +49,8 @@ Polymer('beatsme-player', {
             break;
         }
     };
+=======
+            console.log(response);
+>>>>>>> abfd3590184ab6df50b3db6824eb2c577dc84ea0
   }
 });

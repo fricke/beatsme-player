@@ -1,4 +1,5 @@
 <link rel="import" href="../core-ajax/core-ajax.html">
+<<<<<<< HEAD
 <link rel="import" href="../paper-slider/paper-slider.html">
 <polymer-element
   name="beatsme-player">
@@ -19,6 +20,68 @@
       <div class="play"></div>
     </div>
 
+=======
+<polymer-element
+  name="beatsme-player"
+  attributes="gameData userId beatsMusicUserId">
+  <template>
+
+    <link href="../metro-bootstrap/dist/css/metro-bootstrap.css" rel="stylesheet"/>
+    <core-ajax auto url="http://www.beatsme.com:8080/music/recommendations" on-core-response="{{ajaxResponse}}"></core-ajax>
+
+    <div class="tile">
+        <div class="tile-content play">
+            <i class="icon-play"></i>
+        </div>
+        <div class="tile-play">
+            <span class="name">Play</span>
+        </div>
+    </div>
+
+    <div class="tile double">
+        <div class="tile-content icon">
+            <i class="icon-play-alt"></i>
+        </div>
+        <div class="brand bg-black">
+            <span class="label fg-white">Next</span>
+            <div class="badge bg-darkRed next"></div>
+        </div>
+    </div>
+
+    <div class="tile double">
+        <div class="tile-content icon">
+            <i class="icon-cast-alt"></i>
+        </div>
+        <div class="brand bg-black">
+            <span class="label fg-white">Cast</span>
+            <div class="badge bg-darkRed cast"></div>
+        </div>
+    </div>
+
+    <div class="tile">
+        <div class="tile-content image">
+            <!--img src="images/author.jpg"-->
+        </div>
+        <div class="brand">
+            <span class="label fg-white">Points</span>
+            <span class="badge bg-orange">12</span>
+        </div>
+    </div>
+
+    <div class="tile double">
+        <div class="tile-content image">
+            <!--img src="images/4.jpg"-->
+        </div>
+        <div class="brand bg-dark opacity">
+            <span class="text">
+                This is the song title
+            </span>
+        </div>
+    </div>
+
+    <div class="playgame">{{gameData}}</div>
+
+>>>>>>> abfd3590184ab6df50b3db6824eb2c577dc84ea0
   </template>
   <script src="./beatsme-player.js"></script>
 </polymer-element>
