@@ -1,23 +1,12 @@
 {
-<<<<<<< HEAD
-  "name": "beatsme-game-player",
-  "version": "0.0.1",
-  "main": "player.js",
-  "homepage": "https://github.com/fricke/beatsme-game-player",
-  "authors": [
-    "Chris Fricke <chris.fricke@gmail.com>"
-  ],
-  "description": "A beatsme game player",
-=======
   "name": "beatsme-player",
   "version": "0.0.1",
   "main": "player.js",
-  "homepage": "https://github.com/fricke/beatsme",
+  "homepage": "https://github.com/fricke",
   "authors": [
     "Chris Fricke <chris.fricke@gmail.com>"
   ],
   "description": "A beatsme player",
->>>>>>> abfd3590184ab6df50b3db6824eb2c577dc84ea0
   "keywords": [
     "Audio",
     "Player",
@@ -31,10 +20,6 @@
     "tests"
   ],
   "dependencies": {
-<<<<<<< HEAD
-=======
-    "metro-bootstrap": "*",
->>>>>>> abfd3590184ab6df50b3db6824eb2c577dc84ea0
     "polymer": "Polymer/polymer",
     "platform": "Polymer/platform"
   }

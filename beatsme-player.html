@@ -1,32 +1,15 @@
 <link rel="import" href="../paper-progress/paper-progress.html">
+<script src="http://bam.cdn.beatsmusic.com/bam-1.0.2.min.js"></script>
+
 <polymer-element
   name="beatsme-player"
-  attributes="trackId clientId userId">
+  attributes="trackId accessToken clientId userId externalController">
   <template>
-    <style>
-      .player {
-        width:200px;
-        height:50px;
-        background-color:red;
-      }
-
-      .player .play {
-        width:50%;
-        heght:25px;
-        positon:relative;
-        left:50px;
-      }
-
-    </style>
-    <core-signals on-beatsme-card-clicked="{{ play }}"></core-signals>
-    
-    <script src="http://bam.cdn.beatsmusic.com/bam-1.0.2.min.js"></script>
-
+    <link href="./beatsme-player.css" rel="stylesheet"/>
     <div class="player">
-      <div class="play"></div>
+      <paper-progress id="gameTimeline"></paper-progress>
     </div>
-    <paper-progress></paper-progress>
-
   </template>
-  <script src="./beatsme-player.js"></script>
+  <script type="text/javascript" src="./beatsme-player.js">
+  </script>
 </polymer-element>

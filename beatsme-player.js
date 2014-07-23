@@ -1,50 +1,141 @@
+function createAudioManager(options) {
+  var that = this;
+  var progressBar = options.progressBar || {};
+  var externalController = options.externalController || {};
+  var accessToken = options.accessToken;
+  var userId = options.userId;
+  var stopClipProgress = false;
+
+  var bam = new BeatsAudioManager();
+  bam.on("ready", handleReady);
+  bam.on("error", handleError);
+  bam.on("timeupdate", handleTimeUpdate);
+
+  function handleReady(success) {
+    if (!success) {
+        debug("initialization failed");
+        return;
+    }
+  };
+
+  function handleError(value) {
+    console.log("bam: handleError", value);
+  };
+
+  function handleTimeUpdate(time) {
+    if(!bam.started) {
+      return;
+    }
+    var currentTime = bam.currentTime;
+    var newValue = (currentTime/30) * 100;
+    newValue = newValue > 100 ? 100 : newValue;
+    if(!stopClipProgress) {
+      progressBar.value = newValue;
+    }
+
+    externalController.value = (currentTime/bam.duration) * 100;
+
+    if(newValue === 100 && !bam.clipEnded) {
+      bam.clipEnded = true;
+      that.fire('clip-ended', {});
+    }
+  };
+  function stop(){
+    bam.started = false;
+    progressBar.value = 0;
+    externalController.value = 0;
+    bam.stop();
+  }
+  function pause() {
+    bam.started = false;
+    bam.pause();
+  }
+  function load(trackId) {
+
+    bam.authentication = {
+        access_token: accessToken,
+        user_id: userId
+    };
+    bam.identifier = trackId;
+    bam.started = true;
+    bam.clipEnded = false;
+    progressBar.value = 0;
+    externalController.value = 0;
+    stopClipProgress = false;
+    bam.load();
+  }
+
+  return {
+    getTime: function(){
+      return bam.currentTime;
+    },
+    load: function(trackId) {
+      load(trackId);
+    },
+    pause: function() {
+      pause();
+    },
+    stop: function(){
+      stop();
+    },
+    setExternalController: function(controller) {
+      externalController = controller;
+    },
+    stopClipProgress: function(){
+      stopClipProgress = true;
+    }
+  }
+}
+
 
 Polymer('beatsme-player', {
-  playerData : '',
-  playerIndex: 0,
+  accessToken: null,
+  clientId: null,
+  userId: null,
+  audioManager: null,
   ready: function() {
-    this.data='parent content';
+    this.clientId = this.clientId || localStorage.getItem('clientId');
+    this.accessToken = this.accessToken || localStorage.getItem('accessToken');
+    this.userId = this.userId || localStorage.getItem('userId');
+    this.progressBar = this.shadowRoot.querySelector('paper-progress#gameTimeline')
+    this.loadAudioPlayer();
   },
-  play: function() {
-    debugger;
-    var that = this;
-    var bam = new BeatsAudioManager("beatsme");
-
-    bam.on("ready", handleReady);
-    bam.on("error", handleError);
-    function handleReady(value) {
-        bam.clientId = that.clientId;
-        bam.authentication = {
-            access_token:that.accessToken,
-            user_id:that.userId
-        };
-        bam.identifier = that.trackId;
-        //bam.load();
-    };
-    function handleError(value) {
-        switch(value){
-            case "auth":
-            // Beats Music API auth error (401)
-            break;
-            case "connectionfailure":
-            // audio stream connection failure
-            break;
-            case "apisecurity":
-            // Beats Music API crossdomain error
-            break;
-            case "streamsecurity":
-            // audio stream crossdomain error
-            break;
-            case "streamio":
-            // audio stream io error
-            break;
-            case "apiio":
-            // Beats Music API io error getting track data
-            break;
-            case "flashversion":
-            // flash version too low or not installed
-            break;
-        }
-    };
+  load: function(){
+    this.audioManager.load(this.trackId, this.externalController);
+  },
+  stop: function() {
+    this.audioManager.stop();
+  },
+  pause: function() {
+    this.audioManager.pause();
+  },
+  getTime: function(){
+    return this.audioManager.getTime();
+  },
+  loadAudioPlayer: function(){
+    this.audioManager = createAudioManager.call(this, {
+      accessToken: this.accessToken,
+      userId: this.userId,
+      progressBar: this.progressBar
+    });
+  },
+  trackIdChanged: function(e) {
+    this.load();
+  },
+  externalControllerChanged: function(){
+    this.audioManager.setExternalController(this.externalController);
+  },
+  setProgressRed: function() {
+    this.shadowRoot.querySelector('paper-progress').className = 'red';
+  },
+  resetProgressColor: function() {
+    this.shadowRoot.querySelector('paper-progress').className = '';
+  },
+  flashRed: function(){
+    this.setProgressRed();
+    setTimeout(this.resetProgressColor.bind(this), 500);
+  },
+  stopClipProgress: function(){
+    this.audioManager.stopClipProgress();
   }
 });
