@@ -3,13 +3,14 @@ function createAudioManager(options) {
   var progressBar = options.progressBar || {};
   var externalController = options.externalController || {};
   var accessToken = options.accessToken;
-  var userId = options.userId;
+  var beatsMusicUserId = options.beatsMusicUserId;
   var stopClipProgress = false;
 
   var bam = new BeatsAudioManager();
   bam.on("ready", handleReady);
   bam.on("error", handleError);
   bam.on("timeupdate", handleTimeUpdate);
+  bam.on("ended", handleEnded);
 
   function handleReady(success) {
     if (!success) {
@@ -17,6 +18,10 @@ function createAudioManager(options) {
         return;
     }
   };
+
+  function handleEnded() {
+    that.fire('track-ended');
+  }
 
   function handleError(value) {
     console.log("bam: handleError", value);
@@ -54,7 +59,7 @@ function createAudioManager(options) {
 
     bam.authentication = {
         access_token: accessToken,
-        user_id: userId
+        user_id: beatsMusicUserId
     };
     bam.identifier = trackId;
     bam.started = true;
@@ -91,16 +96,17 @@ function createAudioManager(options) {
 Polymer('beatsme-player', {
   accessToken: null,
   clientId: null,
-  userId: null,
+  beatsMusicUserId: null,
   audioManager: null,
   ready: function() {
     this.clientId = this.clientId || localStorage.getItem('clientId');
     this.accessToken = this.accessToken || localStorage.getItem('accessToken');
-    this.userId = this.userId || localStorage.getItem('userId');
+    this.beatsMusicUserId = this.beatsMusicUserId || localStorage.getItem('beatsMusicUserId');
     this.progressBar = this.shadowRoot.querySelector('paper-progress#gameTimeline')
     this.loadAudioPlayer();
   },
   load: function(){
+    this.resetProgressColor();
     this.audioManager.load(this.trackId, this.externalController);
   },
   stop: function() {
@@ -115,7 +121,7 @@ Polymer('beatsme-player', {
   loadAudioPlayer: function(){
     this.audioManager = createAudioManager.call(this, {
       accessToken: this.accessToken,
-      userId: this.userId,
+      beatsMusicUserId: this.beatsMusicUserId,
       progressBar: this.progressBar
     });
   },
