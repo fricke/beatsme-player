@@ -1,6 +1,6 @@
 {
   "name": "beatsme-player",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "player.js",
   "homepage": "https://github.com/fricke",
   "authors": [
